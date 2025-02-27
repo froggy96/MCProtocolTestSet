@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MCProtocolEnums;
+using System;
 using System.Collections.Generic;
 
 namespace MCProtocolPLCEmulator

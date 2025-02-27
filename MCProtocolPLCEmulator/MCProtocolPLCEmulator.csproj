@@ -49,7 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EnumEndCode.cs" />
     <Compile Include="Mainform.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -101,6 +100,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommonInterface\CommonInterface.csproj">
+      <Project>{97bae365-23f9-49de-bd5b-a22fb9860998}</Project>
+      <Name>CommonInterface</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using static MCProtocolPLCEmulator.MCProtocolCommand;
+using MCProtocolEnums;
 
 namespace MCProtocolPLCEmulator
 {
@@ -94,7 +94,7 @@ namespace MCProtocolPLCEmulator
             PrivateLogger(req.ToString());
             PrivateLogger("");
 
-            PLCWordMemory target = _plcWordMemories.Find(x => x.DeviceLetter.ToString() == ((PlcDeviceType)req.DeviceType).ToString());
+            PLCWordMemory target = _plcWordMemories.Find(x => x.DeviceLetter.ToString() == ((EnumPLCDeviceType)req.DeviceType).ToString());
             var end_code = MCProtocolCommand.ExecuteRequest(req, target);
 
             var res = MCProtocolCommand.SetResponseMessage(req, (ushort)end_code, req.Values);

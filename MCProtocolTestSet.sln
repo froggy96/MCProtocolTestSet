@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35728.132 d17.12
+VisualStudioVersion = 17.12.35728.132
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCProtocolPLCEmulator", "MCProtocolPLCEmulator\MCProtocolPLCEmulator.csproj", "{57F5A572-EB01-48F0-A328-117F04A94AA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonInterface", "CommonInterface\CommonInterface.csproj", "{97BAE365-23F9-49DE-BD5B-A22FB9860998}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{57F5A572-EB01-48F0-A328-117F04A94AA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57F5A572-EB01-48F0-A328-117F04A94AA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57F5A572-EB01-48F0-A328-117F04A94AA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97BAE365-23F9-49DE-BD5B-A22FB9860998}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97BAE365-23F9-49DE-BD5B-A22FB9860998}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97BAE365-23F9-49DE-BD5B-A22FB9860998}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97BAE365-23F9-49DE-BD5B-A22FB9860998}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

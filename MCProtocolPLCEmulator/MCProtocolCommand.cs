@@ -1,90 +1,15 @@
-﻿using System;
+﻿using MCProtocolEnums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace MCProtocolPLCEmulator
 {
     public static class MCProtocolCommand
     {
 
-        public enum PlcDeviceType
-        {
-            M = 0x90
-          , SM = 0x91
-          , L = 0x92
-          , F = 0x93
-          , V = 0x94
-          , S = 0x98
-          , X = 0x9C
-          , Y = 0x9D
-          , B = 0xA0
-          , SB = 0xA1
-          , DX = 0xA2
-          , DY = 0xA3
-          , D = 0xA8
-          , SD = 0xA9
-          , R = 0xAF
-          , ZR = 0xB0
-          , W = 0xB4
-          , SW = 0xB5
-          , TC = 0xC0
-          , TS = 0xC1
-          , TN = 0xC2
-          , CC = 0xC3
-          , CS = 0xC4
-          , CN = 0xC5
-          , SC = 0xC6
-          , SS = 0xC7
-          , SN = 0xC8
-          , Z = 0xCC
-          , TT
-          , TM
-          , CT
-          , CM
-          , A
-          , Max
-        }
-
-        /*
-            Code    Description
-            00 00	Success
-            C0 00	Command Format Error
-            C1 00	Unsupported Command
-            C2 00	Requested Device Not Present
-            C3 00	Data Size Error
-            C4 00	Addressing Range Error
-            C5 00	Accessing Forbidden Device Error
-        */
-
         #region [Request Command : PC -> PLC]
-
-        public enum EnumMC3ERequestCommand
-        {
-            Read = 0x0401,
-            Write = 0x1401
-        }
-
-        public enum MC3ERequestCommandByteIndex
-        {
-            ProtocolType = 0, // 0x0050 -- MC3E Request
-            NetworkNo = 2,
-            PCNo = 3,
-            IONo = 4,
-            ChNo = 6,
-            DataLength = 7,
-            CPUTimer = 9,
-            MainCommand = 11,
-            SubCommand = 13,
-            Address = 15,
-            DeviceType = 18,
-            WordCount = 19,
-            Values = 21,
-        }
-
-
 
         /// <summary>
         /// MC3E Type Request Command (PC --> PLC)
@@ -149,18 +74,6 @@ namespace MCProtocolPLCEmulator
 
 
         #region [Response Command : PLC -> PC]
-
-        public enum MC3EResponseCommandByteIndex
-        {
-            ProtocolType = 0,   // 0xD0 -- MC3E Response
-            NetworkNo = 2,      // 받은 거 그대로
-            PCNo = 3,           // 받은 거 그대로
-            IONo = 4,           // 받은 거 그대로
-            ChNo = 6,           // 받은 거 그대로
-            DataLength = 7,     // Write 인 경우, EndCode 만 이므로 2, Read 인 경우 읽어낸 Byte 수 + 2 (응답 코드)
-            EndCode = 9,        // 응답코드
-            Values = 11,        // Read 요청인 경우...여기서부터 Byte 로 쓴다.
-        }
 
         /// <summary>
         /// MC3E Response Command (PLC --> PC)
@@ -356,7 +269,7 @@ namespace MCProtocolPLCEmulator
             var cmd = new MC3ERequestCommand();
 
             // get protocol type
-            cmd.ProtocolType = BitConverter.ToUInt16(req, (int)MC3ERequestCommandByteIndex.ProtocolType);
+            cmd.ProtocolType = BitConverter.ToUInt16(req, (int)MC3ERequestFrameByteIndex.ProtocolType);
             if (cmd.ProtocolType != 0x0050)
             {
                 throw new ArgumentException($"ProtocolType != 0x0050");
@@ -364,29 +277,29 @@ namespace MCProtocolPLCEmulator
 
 
             // get network no, pc no, io no, ch no
-            cmd.NetworkNo = req[(int)MC3ERequestCommandByteIndex.NetworkNo];
-            cmd.PCNo = req[(int)MC3ERequestCommandByteIndex.PCNo];
-            cmd.IONo = BitConverter.ToUInt16(req, (int)MC3ERequestCommandByteIndex.IONo);
-            cmd.ChNo = req[(int)MC3ERequestCommandByteIndex.ChNo];
+            cmd.NetworkNo = req[(int)MC3ERequestFrameByteIndex.NetworkNo];
+            cmd.PCNo = req[(int)MC3ERequestFrameByteIndex.PCNo];
+            cmd.IONo = BitConverter.ToUInt16(req, (int)MC3ERequestFrameByteIndex.IONo);
+            cmd.ChNo = req[(int)MC3ERequestFrameByteIndex.ChNo];
 
             // get data length
-            cmd.DataLength = BitConverter.ToUInt16(req, (int)MC3ERequestCommandByteIndex.DataLength);
+            cmd.DataLength = BitConverter.ToUInt16(req, (int)MC3ERequestFrameByteIndex.DataLength);
 
             // get cpu timer
-            cmd.CPUTimer = BitConverter.ToUInt16(req, (int)MC3ERequestCommandByteIndex.CPUTimer);
+            cmd.CPUTimer = BitConverter.ToUInt16(req, (int)MC3ERequestFrameByteIndex.CPUTimer);
 
             // get main/sub command
-            cmd.MainCommand = BitConverter.ToUInt16(req, (int)MC3ERequestCommandByteIndex.MainCommand);
-            cmd.SubCommand = BitConverter.ToUInt16(req, (int)MC3ERequestCommandByteIndex.SubCommand);
+            cmd.MainCommand = BitConverter.ToUInt16(req, (int)MC3ERequestFrameByteIndex.MainCommand);
+            cmd.SubCommand = BitConverter.ToUInt16(req, (int)MC3ERequestFrameByteIndex.SubCommand);
 
             // get address, devicetype
-            cmd.Address = (uint)(req[(int)MC3ERequestCommandByteIndex.Address + 2] << 16);
-            cmd.Address += (uint)(req[(int)MC3ERequestCommandByteIndex.Address + 1] << 8);
-            cmd.Address += (uint)(req[(int)MC3ERequestCommandByteIndex.Address]);
-            cmd.DeviceType = req[(int)MC3ERequestCommandByteIndex.DeviceType];
+            cmd.Address = (uint)(req[(int)MC3ERequestFrameByteIndex.Address + 2] << 16);
+            cmd.Address += (uint)(req[(int)MC3ERequestFrameByteIndex.Address + 1] << 8);
+            cmd.Address += (uint)(req[(int)MC3ERequestFrameByteIndex.Address]);
+            cmd.DeviceType = req[(int)MC3ERequestFrameByteIndex.DeviceType];
 
             // get word count
-            cmd.WordCount = BitConverter.ToUInt16(req, (int)MC3ERequestCommandByteIndex.WordCount);
+            cmd.WordCount = BitConverter.ToUInt16(req, (int)MC3ERequestFrameByteIndex.WordCount);
 
             // Write Command Only...
             if (cmd.MainCommand == (ushort)EnumMC3ERequestCommand.Write)
@@ -395,7 +308,7 @@ namespace MCProtocolPLCEmulator
                 cmd.Values = new ushort[cmd.WordCount];
                 for (int i = 0; i < cmd.WordCount; i++)
                 {
-                    cmd.Values[i] = BitConverter.ToUInt16(req, (int)MC3ERequestCommandByteIndex.Values + i * 2);
+                    cmd.Values[i] = BitConverter.ToUInt16(req, (int)MC3ERequestFrameByteIndex.Values + i * 2);
                 }
             }
 
