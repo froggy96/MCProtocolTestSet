@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.wordListGrid1 = new MCProtocolPLCEmulator.WordListGrid(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
             this.label9 = new System.Windows.Forms.Label();
             this.tbWordCount = new System.Windows.Forms.TextBox();
@@ -60,11 +61,11 @@
             this.label8 = new System.Windows.Forms.Label();
             this.tbClientConnectionStatus = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.wordListGrid1 = new MCProtocolPLCEmulator.WordListGrid(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.wordListGrid1)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
@@ -72,7 +73,6 @@
             this.splitContainer2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.wordListGrid1)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -91,9 +91,19 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(1583, 718);
+            this.splitContainer1.Size = new System.Drawing.Size(1584, 761);
             this.splitContainer1.SplitterDistance = 930;
             this.splitContainer1.TabIndex = 1;
+            // 
+            // wordListGrid1
+            // 
+            this.wordListGrid1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.wordListGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wordListGrid1.Location = new System.Drawing.Point(0, 48);
+            this.wordListGrid1.Name = "wordListGrid1";
+            this.wordListGrid1.RowTemplate.Height = 23;
+            this.wordListGrid1.Size = new System.Drawing.Size(926, 709);
+            this.wordListGrid1.TabIndex = 0;
             // 
             // panel1
             // 
@@ -131,7 +141,7 @@
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Location = new System.Drawing.Point(789, 15);
+            this.btnRefresh.Location = new System.Drawing.Point(757, 15);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(123, 23);
             this.btnRefresh.TabIndex = 5;
@@ -204,8 +214,8 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.tbConnectionLog);
             this.splitContainer2.Panel2.Controls.Add(this.panel2);
-            this.splitContainer2.Size = new System.Drawing.Size(649, 718);
-            this.splitContainer2.SplitterDistance = 283;
+            this.splitContainer2.Size = new System.Drawing.Size(650, 761);
+            this.splitContainer2.SplitterDistance = 299;
             this.splitContainer2.SplitterIncrement = 8;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -225,7 +235,7 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(645, 279);
+            this.groupBox1.Size = new System.Drawing.Size(646, 295);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Write Data";
@@ -346,7 +356,7 @@
             this.tbConnectionLog.MaxLength = 2048;
             this.tbConnectionLog.Multiline = true;
             this.tbConnectionLog.Name = "tbConnectionLog";
-            this.tbConnectionLog.Size = new System.Drawing.Size(645, 325);
+            this.tbConnectionLog.Size = new System.Drawing.Size(646, 352);
             this.tbConnectionLog.TabIndex = 7;
             this.tbConnectionLog.Text = "Communication Logs:";
             // 
@@ -361,14 +371,14 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(645, 102);
+            this.panel2.Size = new System.Drawing.Size(646, 102);
             this.panel2.TabIndex = 0;
             // 
             // btnLaunchTcpServer
             // 
             this.btnLaunchTcpServer.Location = new System.Drawing.Point(299, 13);
             this.btnLaunchTcpServer.Name = "btnLaunchTcpServer";
-            this.btnLaunchTcpServer.Size = new System.Drawing.Size(79, 23);
+            this.btnLaunchTcpServer.Size = new System.Drawing.Size(79, 24);
             this.btnLaunchTcpServer.TabIndex = 6;
             this.btnLaunchTcpServer.Text = "Launch";
             this.btnLaunchTcpServer.UseVisualStyleBackColor = true;
@@ -409,7 +419,7 @@
             this.tbClientConnectionStatus.Location = new System.Drawing.Point(125, 61);
             this.tbClientConnectionStatus.MaxLength = 2048;
             this.tbClientConnectionStatus.Name = "tbClientConnectionStatus";
-            this.tbClientConnectionStatus.Size = new System.Drawing.Size(510, 23);
+            this.tbClientConnectionStatus.Size = new System.Drawing.Size(511, 23);
             this.tbClientConnectionStatus.TabIndex = 6;
             this.tbClientConnectionStatus.Text = "No Clients";
             // 
@@ -422,21 +432,11 @@
             this.label7.TabIndex = 6;
             this.label7.Text = "Client Connection:";
             // 
-            // wordListGrid1
-            // 
-            this.wordListGrid1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.wordListGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wordListGrid1.Location = new System.Drawing.Point(0, 48);
-            this.wordListGrid1.Name = "wordListGrid1";
-            this.wordListGrid1.RowTemplate.Height = 23;
-            this.wordListGrid1.Size = new System.Drawing.Size(926, 666);
-            this.wordListGrid1.TabIndex = 0;
-            // 
             // Mainform
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1583, 718);
+            this.ClientSize = new System.Drawing.Size(1584, 761);
             this.Controls.Add(this.splitContainer1);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -447,6 +447,7 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.wordListGrid1)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.splitContainer2.Panel1.ResumeLayout(false);
@@ -458,7 +459,6 @@
             this.groupBox1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.wordListGrid1)).EndInit();
             this.ResumeLayout(false);
 
         }

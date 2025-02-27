@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCProtocolPLCEmulator", "MC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonInterface", "CommonInterface\CommonInterface.csproj", "{97BAE365-23F9-49DE-BD5B-A22FB9860998}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCProtocolClient", "MCProtocolClient\MCProtocolClient.csproj", "{B86A0D80-654B-4756-B1F6-17C636C30ACA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{97BAE365-23F9-49DE-BD5B-A22FB9860998}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97BAE365-23F9-49DE-BD5B-A22FB9860998}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97BAE365-23F9-49DE-BD5B-A22FB9860998}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B86A0D80-654B-4756-B1F6-17C636C30ACA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B86A0D80-654B-4756-B1F6-17C636C30ACA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B86A0D80-654B-4756-B1F6-17C636C30ACA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B86A0D80-654B-4756-B1F6-17C636C30ACA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
