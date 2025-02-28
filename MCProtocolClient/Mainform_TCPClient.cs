@@ -14,8 +14,8 @@ namespace MCProtocolClient
         {
             int portNumber = int.Parse(port);
             _mcProtocolTcpClient = new McProtocolTcp(addr, portNumber);
-            _mcProtocolTcpClient.Open();
             _mcProtocolTcpClient.ConnectionChanged += OnConnectionChanged;
+            _mcProtocolTcpClient.Open();
         }
 
         private void OnConnectionChanged(object sender, bool e)
