@@ -87,7 +87,7 @@ namespace MCProtocolPLCEmulator
                 return;
             }
 
-            if (string.IsNullOrEmpty(tbValueString.Text.Trim()))
+            if (string.IsNullOrEmpty(tbValueString.Text))
             {
                 MessageBox.Show("Input String To Write", "Warning");
                 tbValueString.Focus();
@@ -103,5 +103,103 @@ namespace MCProtocolPLCEmulator
                 MessageBox.Show(ex.Message, "Exception!");
             }
         }
+
+        #region [Float/Double]
+
+        private void writeWords(PLCWordMemory memory, int start, byte[] bytes)
+        {
+            ushort[] values = new ushort[bytes.Length/2];
+            for (int i = 0; i < values.Length; i++)
+            {
+                values[i] = BitConverter.ToUInt16(bytes, i * 2);
+            }
+            memory.Write(start, values.Length, values);
+        }
+
+
+        private void btnWriteFloat_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(tbTargetAddress.Text.Trim()))
+            {
+                MessageBox.Show("Select Target Memory Address", "Warning");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(tbValueFloat.Text.Trim()))
+            {
+                MessageBox.Show("Input Float To Write", "Warning");
+                tbValueString.Focus();
+                return;
+            }
+
+            try
+            {
+                float float_4bytes = float.Parse(tbValueFloat.Text.Trim());
+                byte[] bytes = BitConverter.GetBytes(float_4bytes);
+                writeWords(_currentWordMemory, _start_address, bytes);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Exception!");
+            }
+        }
+
+        private void btnReadFloat_Click(object sender, EventArgs e)
+        {
+            _currentWordMemory.Read(_start_address, 2, out ushort[] words);
+
+            byte[] bytes = new byte[words.Length * 2];
+            for (int i = 0; i < words.Length; i++)
+            {
+                bytes[i * 2] = (byte)words[i];
+                bytes[i * 2 + 1] = (byte)(words[i] >> 8);
+            }
+
+            tbValueFloat.Text = BitConverter.ToSingle(bytes, 0).ToString();
+        }
+
+        private void btnWriteDouble_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(tbTargetAddress.Text.Trim()))
+            {
+                MessageBox.Show("Select Target Memory Address", "Warning");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(tbValueDouble.Text.Trim()))
+            {
+                MessageBox.Show("Input Float To Write", "Warning");
+                tbValueString.Focus();
+                return;
+            }
+
+            try
+            {
+                double double_8bytes = double.Parse(tbValueDouble.Text.Trim());
+                byte[] bytes = BitConverter.GetBytes(double_8bytes);
+                writeWords(_currentWordMemory, _start_address, bytes);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Exception!");
+            }
+        }
+
+        private void btnReadDouble_Click(object sender, EventArgs e)
+        {
+            _currentWordMemory.Read(_start_address, 4, out ushort[] words);
+
+            byte[] bytes = new byte[words.Length * 2];
+            for (int i = 0; i < words.Length; i++)
+            {
+                bytes[i * 2] = (byte)words[i];
+                bytes[i * 2 + 1] = (byte)(words[i] >> 8);
+            }
+
+            tbValueDouble.Text = BitConverter.ToDouble(bytes, 0).ToString();
+        }
+
+
+        #endregion
     }
 }

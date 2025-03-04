@@ -61,6 +61,14 @@
             this.label8 = new System.Windows.Forms.Label();
             this.tbClientConnectionStatus = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.btnWriteFloat = new System.Windows.Forms.Button();
+            this.tbValueFloat = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.btnWriteDouble = new System.Windows.Forms.Button();
+            this.tbValueDouble = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.btnReadFloat = new System.Windows.Forms.Button();
+            this.btnReadDouble = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -221,6 +229,14 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnReadDouble);
+            this.groupBox1.Controls.Add(this.btnReadFloat);
+            this.groupBox1.Controls.Add(this.btnWriteDouble);
+            this.groupBox1.Controls.Add(this.tbValueDouble);
+            this.groupBox1.Controls.Add(this.label11);
+            this.groupBox1.Controls.Add(this.btnWriteFloat);
+            this.groupBox1.Controls.Add(this.tbValueFloat);
+            this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.btnWriteString);
             this.groupBox1.Controls.Add(this.btnWriteDecimal);
             this.groupBox1.Controls.Add(this.tbValueString);
@@ -242,7 +258,7 @@
             // 
             // btnWriteString
             // 
-            this.btnWriteString.Location = new System.Drawing.Point(384, 199);
+            this.btnWriteString.Location = new System.Drawing.Point(384, 147);
             this.btnWriteString.Name = "btnWriteString";
             this.btnWriteString.Size = new System.Drawing.Size(96, 29);
             this.btnWriteString.TabIndex = 14;
@@ -252,7 +268,7 @@
             // 
             // btnWriteDecimal
             // 
-            this.btnWriteDecimal.Location = new System.Drawing.Point(384, 148);
+            this.btnWriteDecimal.Location = new System.Drawing.Point(384, 116);
             this.btnWriteDecimal.Name = "btnWriteDecimal";
             this.btnWriteDecimal.Size = new System.Drawing.Size(96, 29);
             this.btnWriteDecimal.TabIndex = 13;
@@ -263,7 +279,7 @@
             // tbValueString
             // 
             this.tbValueString.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbValueString.Location = new System.Drawing.Point(203, 199);
+            this.tbValueString.Location = new System.Drawing.Point(203, 147);
             this.tbValueString.MaxLength = 32;
             this.tbValueString.Name = "tbValueString";
             this.tbValueString.Size = new System.Drawing.Size(175, 29);
@@ -272,7 +288,7 @@
             // tbValueDecimal
             // 
             this.tbValueDecimal.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbValueDecimal.Location = new System.Drawing.Point(203, 148);
+            this.tbValueDecimal.Location = new System.Drawing.Point(203, 116);
             this.tbValueDecimal.MaxLength = 32;
             this.tbValueDecimal.Name = "tbValueDecimal";
             this.tbValueDecimal.Size = new System.Drawing.Size(175, 29);
@@ -280,7 +296,7 @@
             // 
             // btnWriteHex
             // 
-            this.btnWriteHex.Location = new System.Drawing.Point(384, 98);
+            this.btnWriteHex.Location = new System.Drawing.Point(384, 85);
             this.btnWriteHex.Name = "btnWriteHex";
             this.btnWriteHex.Size = new System.Drawing.Size(96, 29);
             this.btnWriteHex.TabIndex = 6;
@@ -291,7 +307,7 @@
             // tbValueHex
             // 
             this.tbValueHex.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbValueHex.Location = new System.Drawing.Point(203, 98);
+            this.tbValueHex.Location = new System.Drawing.Point(203, 85);
             this.tbValueHex.MaxLength = 32;
             this.tbValueHex.Name = "tbValueHex";
             this.tbValueHex.Size = new System.Drawing.Size(175, 29);
@@ -301,7 +317,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(70, 199);
+            this.label6.Location = new System.Drawing.Point(70, 147);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(127, 30);
             this.label6.TabIndex = 9;
@@ -311,7 +327,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(48, 147);
+            this.label5.Location = new System.Drawing.Point(48, 115);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(149, 30);
             this.label5.TabIndex = 8;
@@ -321,7 +337,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(87, 94);
+            this.label4.Location = new System.Drawing.Point(87, 81);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(110, 30);
             this.label4.TabIndex = 7;
@@ -432,6 +448,84 @@
             this.label7.TabIndex = 6;
             this.label7.Text = "Client Connection:";
             // 
+            // btnWriteFloat
+            // 
+            this.btnWriteFloat.Location = new System.Drawing.Point(384, 178);
+            this.btnWriteFloat.Name = "btnWriteFloat";
+            this.btnWriteFloat.Size = new System.Drawing.Size(96, 29);
+            this.btnWriteFloat.TabIndex = 17;
+            this.btnWriteFloat.Text = "Write";
+            this.btnWriteFloat.UseVisualStyleBackColor = true;
+            this.btnWriteFloat.Click += new System.EventHandler(this.btnWriteFloat_Click);
+            // 
+            // tbValueFloat
+            // 
+            this.tbValueFloat.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbValueFloat.Location = new System.Drawing.Point(203, 178);
+            this.tbValueFloat.MaxLength = 32;
+            this.tbValueFloat.Name = "tbValueFloat";
+            this.tbValueFloat.Size = new System.Drawing.Size(175, 29);
+            this.tbValueFloat.TabIndex = 16;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(55, 178);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(142, 30);
+            this.label10.TabIndex = 15;
+            this.label10.Text = "Float (32 Bits):";
+            // 
+            // btnWriteDouble
+            // 
+            this.btnWriteDouble.Location = new System.Drawing.Point(384, 208);
+            this.btnWriteDouble.Name = "btnWriteDouble";
+            this.btnWriteDouble.Size = new System.Drawing.Size(96, 29);
+            this.btnWriteDouble.TabIndex = 20;
+            this.btnWriteDouble.Text = "Write";
+            this.btnWriteDouble.UseVisualStyleBackColor = true;
+            this.btnWriteDouble.Click += new System.EventHandler(this.btnWriteDouble_Click);
+            // 
+            // tbValueDouble
+            // 
+            this.tbValueDouble.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbValueDouble.Location = new System.Drawing.Point(203, 208);
+            this.tbValueDouble.MaxLength = 32;
+            this.tbValueDouble.Name = "tbValueDouble";
+            this.tbValueDouble.Size = new System.Drawing.Size(175, 29);
+            this.tbValueDouble.TabIndex = 19;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(33, 208);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(164, 30);
+            this.label11.TabIndex = 18;
+            this.label11.Text = "Double (64 Bits):";
+            // 
+            // btnReadFloat
+            // 
+            this.btnReadFloat.Location = new System.Drawing.Point(486, 179);
+            this.btnReadFloat.Name = "btnReadFloat";
+            this.btnReadFloat.Size = new System.Drawing.Size(96, 29);
+            this.btnReadFloat.TabIndex = 21;
+            this.btnReadFloat.Text = "Read";
+            this.btnReadFloat.UseVisualStyleBackColor = true;
+            this.btnReadFloat.Click += new System.EventHandler(this.btnReadFloat_Click);
+            // 
+            // btnReadDouble
+            // 
+            this.btnReadDouble.Location = new System.Drawing.Point(486, 209);
+            this.btnReadDouble.Name = "btnReadDouble";
+            this.btnReadDouble.Size = new System.Drawing.Size(96, 29);
+            this.btnReadDouble.TabIndex = 22;
+            this.btnReadDouble.Text = "Read";
+            this.btnReadDouble.UseVisualStyleBackColor = true;
+            this.btnReadDouble.Click += new System.EventHandler(this.btnReadDouble_Click);
+            // 
             // Mainform
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -497,6 +591,14 @@
         private System.Windows.Forms.TextBox tbServerPort;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox tbWordCount;
+        private System.Windows.Forms.Button btnReadDouble;
+        private System.Windows.Forms.Button btnReadFloat;
+        private System.Windows.Forms.Button btnWriteDouble;
+        private System.Windows.Forms.TextBox tbValueDouble;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Button btnWriteFloat;
+        private System.Windows.Forms.TextBox tbValueFloat;
+        private System.Windows.Forms.Label label10;
     }
 }
 

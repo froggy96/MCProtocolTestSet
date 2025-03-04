@@ -130,5 +130,67 @@ namespace MCProtocolClient
 
             WriteBlock(tbTargetAddress.Text, words.Length, words);
         }
+
+        private void btnWriteFloat_Click(object sender, EventArgs e)
+        {
+            // checking user input -- skipped...
+
+            //
+            float float_4bytes = float.Parse(tbValueFloat.Text.Trim());
+            byte[] bytes = BitConverter.GetBytes(float_4bytes);
+
+            int[] words = new int[bytes.Length / 2];
+            for (int i = 0; i < words.Length; i++)
+            {
+                words[i] = BitConverter.ToUInt16(bytes, i * 2);
+            }
+            WriteBlock(tbTargetAddress.Text, words.Length, words);
+        }
+
+        private void btnReadFloat_Click(object sender, EventArgs e)
+        {
+            int[] words = new int[2];
+            ReadBlock(tbTargetAddress.Text, words.Length, words);
+
+            byte[] bytes = new byte[words.Length * 2];
+            for (int i = 0; i < words.Length; i++)
+            {
+                bytes[i * 2] = (byte)words[i];
+                bytes[i * 2 + 1] = (byte)(words[i] >> 8);
+            }
+
+            tbValueFloat.Text = BitConverter.ToSingle(bytes, 0).ToString();
+        }
+
+        private void btnWriteDouble_Click(object sender, EventArgs e)
+        {
+            // checking user input -- skipped...
+
+            //
+            double double_8bytes = double.Parse(tbValueDouble.Text.Trim());
+            byte[] bytes = BitConverter.GetBytes(double_8bytes);
+
+            int[] words = new int[bytes.Length / 2];
+            for (int i = 0; i < words.Length; i++)
+            {
+                words[i] = BitConverter.ToUInt16(bytes, i * 2);
+            }
+            WriteBlock(tbTargetAddress.Text, words.Length, words);
+        }
+
+        private void btnReadDouble_Click(object sender, EventArgs e)
+        {
+            int[] words = new int[4];
+            ReadBlock(tbTargetAddress.Text, words.Length, words);
+
+            byte[] bytes = new byte[words.Length * 2];
+            for (int i = 0; i < words.Length; i++)
+            {
+                bytes[i * 2] = (byte)words[i];
+                bytes[i * 2 + 1] = (byte)(words[i] >> 8);
+            }
+
+            tbValueDouble.Text = BitConverter.ToDouble(bytes, 0).ToString();
+        }
     }
 }
