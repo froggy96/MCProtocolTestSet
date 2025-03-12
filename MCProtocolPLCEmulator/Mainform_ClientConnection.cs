@@ -62,7 +62,8 @@ namespace MCProtocolPLCEmulator
 
         private void AddLoggingMessageInvoker(string msg)
         {
-            tbConnectionLog.Text += msg + Environment.NewLine;
+            //tbConnectionLog.Text += msg + Environment.NewLine;
+            tbConnectionLog.Text = msg + Environment.NewLine;
             tbConnectionLog.SelectionStart = tbConnectionLog.Text.Length;
             tbConnectionLog.ScrollToCaret();
         }

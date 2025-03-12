@@ -112,11 +112,7 @@ namespace MCProtocolPLCEmulator
         private void PrivateLogger(string msg)
         {
             Console.WriteLine(msg);
-
-            if (Logger != null)
-            {
-                Logger(this, msg);
-            }
+            Logger?.Invoke(this, msg);
         }
 
         private void ListClients()

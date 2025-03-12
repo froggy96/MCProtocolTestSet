@@ -94,7 +94,7 @@ namespace MCProtocolPLCEmulator
                 {
                     ushort ch1 = (ushort)str[i];
                     ushort ch2 = i + 1 < str.Length ? (ushort)str[i + 1] : (ushort)0x00;
-                    Words[start + w] = (ushort)(ch1 << 8 | ch2);
+                    Words[start + w] = (ushort)(ch2 << 8 | ch1);
                     w++;
                 }
 

@@ -35,7 +35,8 @@ namespace MCProtocolPLCEmulator
 
         private void Mainform_MemoryWritten(object sender, EventArgs e)
         {
-            RefreshWordsGridView();
+            // 여기서 하면 메모리 Leak 이 많이 나는 것 같은데...
+            //RefreshWordsGridView();
         }
 
         private void CbDevice_SelectionChangeCommitted(object sender, EventArgs e)
@@ -95,7 +96,10 @@ namespace MCProtocolPLCEmulator
                     list.Add(address, (ushort)words.Words[the_address]);
                 }
 
-                wordListGrid1.SetWords(list);
+                wordListGrid1.BeginInvoke(new MethodInvoker(() =>
+                    {
+                        wordListGrid1.SetWords(list);
+                    }));
             }
         }
 
