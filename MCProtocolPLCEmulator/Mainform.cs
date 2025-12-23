@@ -31,6 +31,9 @@ namespace MCProtocolPLCEmulator
 
             //
             InitPLCWordMemories();
+
+            //
+            btnLaunchTcpServer_Click(this, null);
         }
 
         protected override void OnSizeChanged(EventArgs e)
