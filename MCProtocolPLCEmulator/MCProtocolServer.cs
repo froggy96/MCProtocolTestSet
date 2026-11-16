@@ -1,7 +1,7 @@
 ﻿using SuperSimpleTcp;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using MCProtocolEnums;
 
@@ -22,7 +22,6 @@ namespace MCProtocolPLCEmulator
         private int _Server_port = 8_000;
         private int _IdleClientTimeoutMs = 600_000;
         private string _LastClientIpPort = null;
-        private List<PLCWordMemory> _plcWordMemories = null;
 
         #endregion
 
@@ -43,16 +42,19 @@ namespace MCProtocolPLCEmulator
 
             _Server_ip = server_ip;
             _Server_port = server_port;
-            _plcWordMemories = mem;
-
-
-
-            _Server = new SuperSimpleTcp.SimpleTcpServer(_Server_ip, _Server_port);
+            var server = new SimpleTcpServer(_Server_ip, _Server_port);
+            var pending = new ConcurrentDictionary<string, List<byte>>();
+            _Server = server;
 
             _Server.Events.ClientConnected += ClientConnected;
-            _Server.Events.ClientDisconnected += ClientDisconnected;
-            _Server.Events.DataReceived += DataReceived;
+            _Server.Events.ClientDisconnected += (sender, args) =>
+            {
+                pending.TryRemove(args.IpPort, out _);
+                ClientDisconnected(sender, args);
+            };
+            _Server.Events.DataReceived += (sender, args) => DataReceived(server, pending, mem, args);
             _Server.Events.DataSent += DataSent;
+            _Server.Settings.UseAsyncDataReceivedEvents = false;
             _Server.Keepalive.EnableTcpKeepAlives = true;
             _Server.Settings.IdleClientTimeoutMs = _IdleClientTimeoutMs;
             _Server.Settings.MutuallyAuthenticate = false;
@@ -79,29 +81,80 @@ namespace MCProtocolPLCEmulator
             ListClients();
         }
 
-        private void DataReceived(object sender, DataReceivedEventArgs e)
+        private void DataReceived(SimpleTcpServer server, ConcurrentDictionary<string, List<byte>> pending,
+            List<PLCWordMemory> memories, DataReceivedEventArgs e)
+        {
+            var buffer = pending.GetOrAdd(e.IpPort, _ => new List<byte>());
+            buffer.AddRange(e.Data);
+            int consumed = 0;
+            try
+            {
+                while (buffer.Count - consumed >= 2)
+                {
+                    int protocol = buffer[consumed] | (buffer[consumed + 1] << 8);
+                    if (protocol != MCProtocolCommand.Request3E && protocol != MCProtocolCommand.Request4E)
+                    {
+                        throw new ArgumentException("Unsupported request subheader.");
+                    }
+
+                    int lengthOffset = (int)MC3ERequestFrameByteIndex.DataLength;
+                    if (protocol == MCProtocolCommand.Request4E)
+                    {
+                        lengthOffset += MCProtocolCommand.SerialAndReservedLength;
+                    }
+                    int headerLength = lengthOffset + 2;
+                    if (buffer.Count - consumed < headerLength)
+                    {
+                        break;
+                    }
+
+                    int lengthIndex = consumed + lengthOffset;
+                    int dataLength = buffer[lengthIndex] | (buffer[lengthIndex + 1] << 8);
+                    int frameLength = headerLength + dataLength;
+                    if (buffer.Count - consumed < frameLength)
+                    {
+                        break;
+                    }
+
+                    var frame = new byte[frameLength];
+                    buffer.CopyTo(consumed, frame, 0, frameLength);
+                    ProcessRequest(server, memories, e.IpPort, frame);
+                    consumed += frameLength;
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                PrivateLogger($"[{e.IpPort}] Invalid MC request: {ex.Message}");
+                pending.TryRemove(e.IpPort, out _);
+                server.DisconnectClient(e.IpPort);
+                return;
+            }
+            buffer.RemoveRange(0, consumed);
+        }
+
+        private void ProcessRequest(SimpleTcpServer server, List<PLCWordMemory> memories, string client, byte[] frame)
         {
             StringBuilder sb = new StringBuilder();
-            foreach (var item in e.Data)
+            foreach (var item in frame)
             {
                 sb.Append(item.ToString("X2"));
             }
-            PrivateLogger($"[{e.IpPort}] recv : {sb}");
+            PrivateLogger($"[{client}] recv : {sb}");
 
 
-            var req = MCProtocolCommand.DecodeMC3ERequestCommand(e.Data.ToArray());
+            var req = MCProtocolCommand.DecodeRequestCommand(frame);
             PrivateLogger("Request Command:");
             PrivateLogger(req.ToString());
             PrivateLogger("");
 
-            PLCWordMemory target = _plcWordMemories.Find(x => x.DeviceLetter.ToString() == ((EnumPLCDeviceType)req.DeviceType).ToString());
+            PLCWordMemory target = memories.Find(x => x.DeviceLetter.ToString() == ((EnumPLCDeviceType)req.DeviceType).ToString());
             var end_code = MCProtocolCommand.ExecuteRequest(req, target);
 
             var res = MCProtocolCommand.SetResponseMessage(req, (ushort)end_code, req.Values);
             PrivateLogger("Response Message:");
             PrivateLogger(res.ToString());
 
-            _Server.Send(e.IpPort, MCProtocolCommand.EncodeMC3EResponseMessage(res));
+            server.Send(client, MCProtocolCommand.EncodeResponseMessage(res));
         }
 
         private void DataSent(object sender, DataSentEventArgs e)

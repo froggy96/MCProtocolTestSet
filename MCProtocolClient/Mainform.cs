@@ -8,6 +8,7 @@ namespace MCProtocolClient
         public Mainform()
         {
             InitializeComponent();
+            cbFrame.SelectedIndex = 0;
         }
 
         private void MoveWindowToActiveScreen()

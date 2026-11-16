@@ -1,6 +1,7 @@
 ﻿using MCProtocolClient;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -75,6 +76,7 @@ namespace MCProtocol
 
     abstract public class McProtocolApp : PLC
     {
+        private readonly object _exchangeLock = new object();
 
         public McFrame CommandFrame { get; set; }
 
@@ -84,7 +86,7 @@ namespace MCProtocol
 
         protected McProtocolApp(string iHostName, int iPortNumber)
         {
-            CommandFrame = McFrame.MC3E; // MC4E 쓰려면, 해당 처리 기능을 추가로 개발해야 한다...
+            CommandFrame = McFrame.MC3E;
             HostName = iHostName;
             PortNumber = iPortNumber;
         }
@@ -148,10 +150,7 @@ namespace MCProtocol
             {
                 data.Add(d);
             }
-            byte[] sdCommand = Command.SetCommand(0x1401, 0x0001, data.ToArray());
-            byte[] rtResponse = TryExecution(sdCommand);
-            int rtCode = Command.SetResponse(rtResponse);
-            return rtCode;
+            return Exchange(0x1401, 0x0001, data.ToArray(), 0, out _);
         }
 
         public int GetBitDevice(string iDeviceName, int iSize, int[] oData)
@@ -175,10 +174,7 @@ namespace MCProtocol
                       , (byte) iSize
                       , (byte) (iSize >> 8)
                     };
-            byte[] sdCommand = Command.SetCommand(0x0401, 0x0001, data.ToArray());
-            byte[] rtResponse = TryExecution(sdCommand);
-            int rtCode = Command.SetResponse(rtResponse);
-            byte[] rtData = Command.Response;
+            int rtCode = Exchange(0x0401, 0x0001, data.ToArray(), (iSize + 1) / 2, out byte[] rtData);
             for (int i = 0; i < iSize; ++i)
             {
                 if (i % 2 == 0)
@@ -219,10 +215,7 @@ namespace MCProtocol
                 data.Add((byte)t);
                 data.Add((byte)(t >> 8));
             }
-            byte[] sdCommand = Command.SetCommand(0x1401, 0x0000, data.ToArray());
-            byte[] rtResponse = TryExecution(sdCommand);
-            int rtCode = Command.SetResponse(rtResponse);
-            return rtCode;
+            return Exchange(0x1401, 0x0000, data.ToArray(), 0, out _);
         }
 
         public int ReadDeviceBlock(string iDeviceName, int iSize, int[] oData)
@@ -246,10 +239,7 @@ namespace MCProtocol
                       , (byte) iSize
                       , (byte) (iSize >> 8)
                     };
-            byte[] sdCommand = Command.SetCommand(0x0401, 0x0000, data.ToArray());
-            byte[] rtResponse = TryExecution(sdCommand);
-            int rtCode = Command.SetResponse(rtResponse);
-            byte[] rtData = Command.Response;
+            int rtCode = Exchange(0x0401, 0x0000, data.ToArray(), iSize * 2, out byte[] rtData);
             for (int i = 0; i < iSize; ++i)
             {
                 oData[i] = (rtCode == 0) ? BitConverter.ToInt16(rtData, i * 2) : 0;
@@ -280,10 +270,7 @@ namespace MCProtocol
                       , (byte) iData
                       , (byte) (iData >> 8)
                     };
-            byte[] sdCommand = Command.SetCommand(0x1401, 0x0000, data.ToArray());
-            byte[] rtResponse = TryExecution(sdCommand);
-            int rtCode = Command.SetResponse(rtResponse);
-            return rtCode;
+            return Exchange(0x1401, 0x0000, data.ToArray(), 0, out _);
         }
 
         public int GetDevice(string iDeviceName, out int oData)
@@ -307,16 +294,13 @@ namespace MCProtocol
                       , 0x01
                       , 0x00
                     };
-            byte[] sdCommand = Command.SetCommand(0x0401, 0x0000, data.ToArray());
-            byte[] rtResponse = TryExecution(sdCommand);
-            int rtCode = Command.SetResponse(rtResponse);
+            int rtCode = Exchange(0x0401, 0x0000, data.ToArray(), 2, out byte[] rtData);
             if (0 < rtCode)
             {
                 oData = 0;
             }
             else
             {
-                byte[] rtData = Command.Response;
                 oData = BitConverter.ToInt16(rtData, 0);
             }
             return rtCode;
@@ -480,38 +464,30 @@ namespace MCProtocol
         private const int BlockSize = 0x0010;
         private McCommand Command { get; set; }
 
-        private byte[] TryExecution(byte[] iCommand)
+        private int Exchange(uint mainCommand, uint subCommand, byte[] data, int expectedBytes, out byte[] responseData)
         {
-            byte[] rtResponse;
-            int tCount = 10;
-            do
+            lock (_exchangeLock)
             {
-                rtResponse = Execute(iCommand);
-                --tCount;
-                if (tCount < 0)
-                {
-                    throw new Exception("Failed To Get Correct Values From The PLC");
-                }
-            } while (Command.IsIncorrectResponse(rtResponse));
-            return rtResponse;
+                var command = Command;
+                byte[] request = command.SetCommand(mainCommand, subCommand, data);
+                byte[] response = Execute(request);
+                return command.DecodeResponse(request, response, expectedBytes, out responseData);
+            }
         }
 
         class McCommand
         {
             private McFrame FrameType { get; set; }  // 프레임 종류
-            private uint SerialNumber { get; set; }  // 시리얼 번호
+            private ushort _nextSerialNumber = 1;
             private uint NetwrokNumber { get; set; } // 네트워크 번호
             private uint PcNumber { get; set; }      // PC 번호
             private uint IoNumber { get; set; }      // 요청 대상 유닛 I/O 번호
             private uint ChannelNumber { get; set; } // 요청 대상 유닛 채널 번호
             private uint CpuTimer { get; set; }      // CPU 모니터링 타이머
-            private int ResultCode { get; set; }     // 종료 코드
-            public byte[] Response { get; private set; }    // 응답 데이터
 
             public McCommand(McFrame iFrame)
             {
                 FrameType = iFrame;
-                SerialNumber = 0x0001u; // --> MC4E 포맷을 쓸 때, 대량으로 읽기/쓰기 명령을 보내려면 일정 단위로 나눠줘야 하는데 그 때 명령-응답 패킷을 짝지어서 구분할 순서번호이다. 보통은 명령 한번에 읽기/쓰기 하니까 1 만 있으면 되겠지.
                 NetwrokNumber = 0x0000u;
                 PcNumber = 0x00FFu;
                 IoNumber = 0x03FFu;
@@ -521,7 +497,7 @@ namespace MCProtocol
 
             public byte[] SetCommand(uint iMainCommand, uint iSubCommand, byte[] iData)
             {
-                var dataLength = (uint)(iData.Length + 6);
+                var dataLength = checked((ushort)(iData.Length + 6));
                 var ret = new List<byte>(iData.Length + 20);
                 uint frame = (FrameType == McFrame.MC3E) ? 0x0050u :
                              (FrameType == McFrame.MC4E) ? 0x0054u : 0x0000u;
@@ -529,8 +505,10 @@ namespace MCProtocol
                 ret.Add((byte)(frame >> 8));
                 if (FrameType == McFrame.MC4E)
                 {
-                    ret.Add((byte)SerialNumber);
-                    ret.Add((byte)(SerialNumber >> 8));
+                    ushort serialNumber = _nextSerialNumber;
+                    _nextSerialNumber = unchecked((ushort)(serialNumber + 1));
+                    ret.Add((byte)serialNumber);
+                    ret.Add((byte)(serialNumber >> 8));
                     ret.Add(0x00);
                     ret.Add(0x00);
                 }
@@ -551,29 +529,30 @@ namespace MCProtocol
                 return ret.ToArray();
             }
 
-            public int SetResponse(byte[] iResponse)
+            public int DecodeResponse(byte[] request, byte[] response, int expectedBytes, out byte[] data)
             {
-                int min = (FrameType == McFrame.MC3E) ? 11 : 15;
-                if (min <= iResponse.Length)
+                bool is4E = FrameType == McFrame.MC4E;
+                int headerLength = is4E ? 13 : 9;
+                ushort responseHeader = is4E ? (ushort)0x00D4 : (ushort)0x00D0;
+                if (response.Length < headerLength + 2 || BitConverter.ToUInt16(response, 0) != responseHeader)
                 {
-                    var btCount = new[] { iResponse[min - 4], iResponse[min - 3] };
-                    var btCode = new[] { iResponse[min - 2], iResponse[min - 1] };
-                    int rsCount = BitConverter.ToUInt16(btCount, 0);
-                    ResultCode = BitConverter.ToUInt16(btCode, 0);
-                    Response = new byte[rsCount - 2];
-                    Buffer.BlockCopy(iResponse, min, Response, 0, Response.Length);
+                    throw new InvalidDataException("Invalid MC response subheader.");
                 }
-                return ResultCode;
-            }
-
-            public bool IsIncorrectResponse(byte[] iResponse)
-            {
-                var min = (FrameType == McFrame.MC3E) ? 11 : 15;
-                var btCount = new[] { iResponse[min - 4], iResponse[min - 3] };
-                var btCode = new[] { iResponse[min - 2], iResponse[min - 1] };
-                var rsCount = BitConverter.ToUInt16(btCount, 0) - 2;
-                var rsCode = BitConverter.ToUInt16(btCode, 0);
-                return (rsCode == 0 && rsCount != (iResponse.Length - min));
+                if (is4E && (BitConverter.ToUInt16(response, 2) != BitConverter.ToUInt16(request, 2) ||
+                    response[4] != 0 || response[5] != 0))
+                {
+                    throw new InvalidDataException("Invalid 4E response serial number or reserved bytes.");
+                }
+                int dataLength = BitConverter.ToUInt16(response, headerLength - 2);
+                int resultCode = BitConverter.ToUInt16(response, headerLength);
+                if (response.Length != headerLength + dataLength || dataLength < 2 ||
+                    (resultCode == 0 && dataLength - 2 != expectedBytes))
+                {
+                    throw new InvalidDataException("Unexpected MC response data length.");
+                }
+                data = new byte[dataLength - 2];
+                Buffer.BlockCopy(response, headerLength + 2, data, 0, data.Length);
+                return resultCode;
             }
         }
     }

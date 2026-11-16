@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.btnOpenConnection = new System.Windows.Forms.Button();
             this.tbServerPort = new System.Windows.Forms.TextBox();
+            this.cbFrame = new System.Windows.Forms.ComboBox();
             this.tbServerAddress = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -99,6 +100,16 @@
             this.tbServerPort.Size = new System.Drawing.Size(46, 23);
             this.tbServerPort.TabIndex = 9;
             this.tbServerPort.Text = "8000";
+            //
+            // cbFrame
+            //
+            this.cbFrame.AccessibleName = "MC frame";
+            this.cbFrame.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbFrame.Items.AddRange(new object[] { "MC3E", "MC4E" });
+            this.cbFrame.Location = new System.Drawing.Point(351, 61);
+            this.cbFrame.Name = "cbFrame";
+            this.cbFrame.Size = new System.Drawing.Size(80, 23);
+            this.cbFrame.TabIndex = 11;
             // 
             // tbServerAddress
             // 
@@ -143,6 +154,7 @@
             // panel2
             // 
             this.panel2.Controls.Add(this.btnCloseConnection);
+            this.panel2.Controls.Add(this.cbFrame);
             this.panel2.Controls.Add(this.btnOpenConnection);
             this.panel2.Controls.Add(this.tbServerPort);
             this.panel2.Controls.Add(this.tbServerAddress);
@@ -173,7 +185,7 @@
             this.tbClientConnectionStatus.Location = new System.Drawing.Point(125, 61);
             this.tbClientConnectionStatus.MaxLength = 2048;
             this.tbClientConnectionStatus.Name = "tbClientConnectionStatus";
-            this.tbClientConnectionStatus.Size = new System.Drawing.Size(511, 23);
+            this.tbClientConnectionStatus.Size = new System.Drawing.Size(220, 23);
             this.tbClientConnectionStatus.TabIndex = 6;
             this.tbClientConnectionStatus.Text = "No Clients";
             // 
@@ -534,6 +546,7 @@
 
         private System.Windows.Forms.Button btnOpenConnection;
         private System.Windows.Forms.TextBox tbServerPort;
+        private System.Windows.Forms.ComboBox cbFrame;
         private System.Windows.Forms.TextBox tbServerAddress;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
