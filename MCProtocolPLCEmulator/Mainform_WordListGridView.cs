@@ -103,6 +103,29 @@ namespace MCProtocolPLCEmulator
             }
         }
 
+        private void btnRandomData_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Write Random Data? Entire Memory Will Be Overwritten.", "Overwrite?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                //
+                var rand = new Random();
+
+                //
+                foreach (var block in _plcWordMemories)
+                {
+                    for(int i = 0; i < block.Words.Length;i++)
+                    {
+                        block.Words[i] = (ushort)rand.Next(ushort.MaxValue);
+                    }
+                }
+
+                //
+                MessageBox.Show("Done!");
+                RefreshWordsGridView();
+            }
+        }
+
+
         private void wordListGrid1_SelectionChanged(object sender, EventArgs e)
         {
             if (wordListGrid1.SelectedRows.Count > 0)

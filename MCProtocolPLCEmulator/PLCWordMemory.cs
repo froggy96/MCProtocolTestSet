@@ -18,10 +18,12 @@ namespace MCProtocolPLCEmulator
 
         public ushort[] Words;
 
-        public PLCWordMemory(char device_letter)
+        public const int MAX_WORDS = 20_000;
+
+        public PLCWordMemory(char device_letter, int word_count = MAX_WORDS)
         {
             DeviceLetter = device_letter;
-            Words = new ushort[20_000];
+            Words = new ushort[word_count];
         }
 
         public PLCWordMemory(int word_count, char device_letter)

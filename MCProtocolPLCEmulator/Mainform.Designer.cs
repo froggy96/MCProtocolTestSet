@@ -42,6 +42,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnReadDouble = new System.Windows.Forms.Button();
+            this.btnReadFloat = new System.Windows.Forms.Button();
+            this.btnWriteDouble = new System.Windows.Forms.Button();
+            this.tbValueDouble = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.btnWriteFloat = new System.Windows.Forms.Button();
+            this.tbValueFloat = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.btnWriteString = new System.Windows.Forms.Button();
             this.btnWriteDecimal = new System.Windows.Forms.Button();
             this.tbValueString = new System.Windows.Forms.TextBox();
@@ -61,14 +69,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.tbClientConnectionStatus = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.btnWriteFloat = new System.Windows.Forms.Button();
-            this.tbValueFloat = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.btnWriteDouble = new System.Windows.Forms.Button();
-            this.tbValueDouble = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.btnReadFloat = new System.Windows.Forms.Button();
-            this.btnReadDouble = new System.Windows.Forms.Button();
+            this.btnRandomData = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -115,6 +116,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.btnRandomData);
             this.panel1.Controls.Add(this.label9);
             this.panel1.Controls.Add(this.tbWordCount);
             this.panel1.Controls.Add(this.btnRefresh);
@@ -149,7 +151,7 @@
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Location = new System.Drawing.Point(757, 15);
+            this.btnRefresh.Location = new System.Drawing.Point(570, 16);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(123, 23);
             this.btnRefresh.TabIndex = 5;
@@ -255,6 +257,84 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Write Data";
+            // 
+            // btnReadDouble
+            // 
+            this.btnReadDouble.Location = new System.Drawing.Point(486, 209);
+            this.btnReadDouble.Name = "btnReadDouble";
+            this.btnReadDouble.Size = new System.Drawing.Size(96, 29);
+            this.btnReadDouble.TabIndex = 22;
+            this.btnReadDouble.Text = "Read";
+            this.btnReadDouble.UseVisualStyleBackColor = true;
+            this.btnReadDouble.Click += new System.EventHandler(this.btnReadDouble_Click);
+            // 
+            // btnReadFloat
+            // 
+            this.btnReadFloat.Location = new System.Drawing.Point(486, 179);
+            this.btnReadFloat.Name = "btnReadFloat";
+            this.btnReadFloat.Size = new System.Drawing.Size(96, 29);
+            this.btnReadFloat.TabIndex = 21;
+            this.btnReadFloat.Text = "Read";
+            this.btnReadFloat.UseVisualStyleBackColor = true;
+            this.btnReadFloat.Click += new System.EventHandler(this.btnReadFloat_Click);
+            // 
+            // btnWriteDouble
+            // 
+            this.btnWriteDouble.Location = new System.Drawing.Point(384, 208);
+            this.btnWriteDouble.Name = "btnWriteDouble";
+            this.btnWriteDouble.Size = new System.Drawing.Size(96, 29);
+            this.btnWriteDouble.TabIndex = 20;
+            this.btnWriteDouble.Text = "Write";
+            this.btnWriteDouble.UseVisualStyleBackColor = true;
+            this.btnWriteDouble.Click += new System.EventHandler(this.btnWriteDouble_Click);
+            // 
+            // tbValueDouble
+            // 
+            this.tbValueDouble.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbValueDouble.Location = new System.Drawing.Point(203, 208);
+            this.tbValueDouble.MaxLength = 32;
+            this.tbValueDouble.Name = "tbValueDouble";
+            this.tbValueDouble.Size = new System.Drawing.Size(175, 29);
+            this.tbValueDouble.TabIndex = 19;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(33, 208);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(164, 30);
+            this.label11.TabIndex = 18;
+            this.label11.Text = "Double (64 Bits):";
+            // 
+            // btnWriteFloat
+            // 
+            this.btnWriteFloat.Location = new System.Drawing.Point(384, 178);
+            this.btnWriteFloat.Name = "btnWriteFloat";
+            this.btnWriteFloat.Size = new System.Drawing.Size(96, 29);
+            this.btnWriteFloat.TabIndex = 17;
+            this.btnWriteFloat.Text = "Write";
+            this.btnWriteFloat.UseVisualStyleBackColor = true;
+            this.btnWriteFloat.Click += new System.EventHandler(this.btnWriteFloat_Click);
+            // 
+            // tbValueFloat
+            // 
+            this.tbValueFloat.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbValueFloat.Location = new System.Drawing.Point(203, 178);
+            this.tbValueFloat.MaxLength = 32;
+            this.tbValueFloat.Name = "tbValueFloat";
+            this.tbValueFloat.Size = new System.Drawing.Size(175, 29);
+            this.tbValueFloat.TabIndex = 16;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(55, 178);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(142, 30);
+            this.label10.TabIndex = 15;
+            this.label10.Text = "Float (32 Bits):";
             // 
             // btnWriteString
             // 
@@ -448,83 +528,15 @@
             this.label7.TabIndex = 6;
             this.label7.Text = "Client Connection:";
             // 
-            // btnWriteFloat
+            // btnRandomData
             // 
-            this.btnWriteFloat.Location = new System.Drawing.Point(384, 178);
-            this.btnWriteFloat.Name = "btnWriteFloat";
-            this.btnWriteFloat.Size = new System.Drawing.Size(96, 29);
-            this.btnWriteFloat.TabIndex = 17;
-            this.btnWriteFloat.Text = "Write";
-            this.btnWriteFloat.UseVisualStyleBackColor = true;
-            this.btnWriteFloat.Click += new System.EventHandler(this.btnWriteFloat_Click);
-            // 
-            // tbValueFloat
-            // 
-            this.tbValueFloat.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbValueFloat.Location = new System.Drawing.Point(203, 178);
-            this.tbValueFloat.MaxLength = 32;
-            this.tbValueFloat.Name = "tbValueFloat";
-            this.tbValueFloat.Size = new System.Drawing.Size(175, 29);
-            this.tbValueFloat.TabIndex = 16;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(55, 178);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(142, 30);
-            this.label10.TabIndex = 15;
-            this.label10.Text = "Float (32 Bits):";
-            // 
-            // btnWriteDouble
-            // 
-            this.btnWriteDouble.Location = new System.Drawing.Point(384, 208);
-            this.btnWriteDouble.Name = "btnWriteDouble";
-            this.btnWriteDouble.Size = new System.Drawing.Size(96, 29);
-            this.btnWriteDouble.TabIndex = 20;
-            this.btnWriteDouble.Text = "Write";
-            this.btnWriteDouble.UseVisualStyleBackColor = true;
-            this.btnWriteDouble.Click += new System.EventHandler(this.btnWriteDouble_Click);
-            // 
-            // tbValueDouble
-            // 
-            this.tbValueDouble.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbValueDouble.Location = new System.Drawing.Point(203, 208);
-            this.tbValueDouble.MaxLength = 32;
-            this.tbValueDouble.Name = "tbValueDouble";
-            this.tbValueDouble.Size = new System.Drawing.Size(175, 29);
-            this.tbValueDouble.TabIndex = 19;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(33, 208);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(164, 30);
-            this.label11.TabIndex = 18;
-            this.label11.Text = "Double (64 Bits):";
-            // 
-            // btnReadFloat
-            // 
-            this.btnReadFloat.Location = new System.Drawing.Point(486, 179);
-            this.btnReadFloat.Name = "btnReadFloat";
-            this.btnReadFloat.Size = new System.Drawing.Size(96, 29);
-            this.btnReadFloat.TabIndex = 21;
-            this.btnReadFloat.Text = "Read";
-            this.btnReadFloat.UseVisualStyleBackColor = true;
-            this.btnReadFloat.Click += new System.EventHandler(this.btnReadFloat_Click);
-            // 
-            // btnReadDouble
-            // 
-            this.btnReadDouble.Location = new System.Drawing.Point(486, 209);
-            this.btnReadDouble.Name = "btnReadDouble";
-            this.btnReadDouble.Size = new System.Drawing.Size(96, 29);
-            this.btnReadDouble.TabIndex = 22;
-            this.btnReadDouble.Text = "Read";
-            this.btnReadDouble.UseVisualStyleBackColor = true;
-            this.btnReadDouble.Click += new System.EventHandler(this.btnReadDouble_Click);
+            this.btnRandomData.Location = new System.Drawing.Point(699, 16);
+            this.btnRandomData.Name = "btnRandomData";
+            this.btnRandomData.Size = new System.Drawing.Size(123, 23);
+            this.btnRandomData.TabIndex = 8;
+            this.btnRandomData.Text = "Make Random";
+            this.btnRandomData.UseVisualStyleBackColor = true;
+            this.btnRandomData.Click += new System.EventHandler(this.btnRandomData_Click);
             // 
             // Mainform
             // 
@@ -599,6 +611,7 @@
         private System.Windows.Forms.Button btnWriteFloat;
         private System.Windows.Forms.TextBox tbValueFloat;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Button btnRandomData;
     }
 }
 
