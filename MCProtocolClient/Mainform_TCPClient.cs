@@ -13,7 +13,15 @@ namespace MCProtocolClient
         private void OpenConnection(string addr, string port)
         {
             int portNumber = int.Parse(port);
-            _mcProtocolTcpClient = new McProtocolTcp(addr, portNumber);
+            if (_mcProtocolTcpClient != null)
+            {
+                _mcProtocolTcpClient.ConnectionChanged -= OnConnectionChanged;
+                _mcProtocolTcpClient.Close();
+            }
+            _mcProtocolTcpClient = new McProtocolTcp(addr, portNumber)
+            {
+                CommandFrame = cbFrame.SelectedIndex == 1 ? McFrame.MC4E : McFrame.MC3E
+            };
             _mcProtocolTcpClient.ConnectionChanged += OnConnectionChanged;
             _mcProtocolTcpClient.Open();
         }

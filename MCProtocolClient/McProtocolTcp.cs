@@ -64,23 +64,49 @@ namespace MCProtocol
 
         override protected byte[] Execute(byte[] iCommand)
         {
-            NetworkStream ns = _tcpClient.GetStream();
-            ns.Write(iCommand, 0, iCommand.Length);
-            ns.Flush();
-
-            using (var ms = new MemoryStream())
+            TcpClient connection = _tcpClient;
+            NetworkStream stream = connection.GetStream();
+            stream.ReadTimeout = 10_000;
+            try
             {
-                var buff = new byte[256];
-                do
+                stream.Write(iCommand, 0, iCommand.Length);
+                bool is4E = iCommand[0] == 0x54;
+                var header = new byte[is4E ? 13 : 9];
+                ReadExactly(stream, header, 0, 2);
+                if (header[0] != (is4E ? 0xD4 : 0xD0) || header[1] != 0)
                 {
-                    int sz = ns.Read(buff, 0, buff.Length);
-                    if (sz == 0)
-                    {
-                        throw new Exception("Reading Response From PLC Failed");
-                    }
-                    ms.Write(buff, 0, sz);
-                } while (ns.DataAvailable);
-                return ms.ToArray();
+                    throw new InvalidDataException("Unexpected MC response frame type.");
+                }
+                ReadExactly(stream, header, 2, header.Length - 2);
+                int dataLength = BitConverter.ToUInt16(header, header.Length - 2);
+                if (dataLength < 2)
+                {
+                    throw new InvalidDataException("The MC response is missing its end code.");
+                }
+
+                var response = new byte[header.Length + dataLength];
+                Buffer.BlockCopy(header, 0, response, 0, header.Length);
+                ReadExactly(stream, response, header.Length, dataLength);
+                return response;
+            }
+            catch (Exception ex) when (ex is IOException || ex is InvalidDataException)
+            {
+                connection.Close();
+                throw;
+            }
+        }
+
+        private static void ReadExactly(NetworkStream stream, byte[] buffer, int offset, int count)
+        {
+            int end = offset + count;
+            while (offset < end)
+            {
+                int received = stream.Read(buffer, offset, end - offset);
+                if (received == 0)
+                {
+                    throw new EndOfStreamException("The connection closed before the MC response was complete.");
+                }
+                offset += received;
             }
         }
 
